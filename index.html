@@ -288,136 +288,130 @@ h1 .accent {
   text-wrap: pretty;
 }
 
-/* 6. SIGNATURE VISUAL — the D monogram as a tunnel of contours -------------- */
+/* 6. SIGNATURE VISUAL — code becoming product ------------------------------ */
 .visual {
+  position: relative;
   justify-self: end;
   width: min(100%, 640px, 58svh);
   aspect-ratio: 5 / 4;
-  container-type: inline-size;   /* lets the 3D depth scale with the visual (cqw) */
+  container-type: inline-size;   /* sizes below scale with the visual (cqw) */
+  --fs: clamp(7px, 2.05cqw, 12.5px);
 }
-.visual { position: relative; }
-
-/* terminal card — software signature, overlapping the monogram's lower corner */
-.term {
+.halo {
   position: absolute;
-  right: 0;
-  bottom: 3%;
-  z-index: 2;
-  width: clamp(190px, 41cqw, 280px);
+  inset: -12% -8%;
+  background:
+    radial-gradient(42% 46% at 40% 42%, rgba(142, 197, 255, .16), transparent 70%),
+    radial-gradient(55% 55% at 62% 62%, rgba(79, 140, 255, .14), transparent 75%);
+  animation: breathe 9s ease-in-out infinite;
+}
+.win {
+  position: absolute;
   font-family: var(--font-mono);
-  font-size: .66rem;
+  font-size: var(--fs);
   line-height: 1.75;
   color: var(--text-2);
-  background: linear-gradient(180deg, rgba(24, 28, 36, .62), rgba(12, 14, 19, .72));
+  background: linear-gradient(180deg, rgba(26, 30, 38, .74), rgba(12, 14, 19, .86));
   border: 1px solid var(--line);
-  border-radius: 12px;
-  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, .8), inset 0 1px 0 rgba(255, 255, 255, .06);
+  border-radius: 1.5em;
+  box-shadow: 0 30px 70px -28px rgba(0, 0, 0, .85), inset 0 1px 0 rgba(255, 255, 255, .07);
   -webkit-backdrop-filter: blur(10px);
           backdrop-filter: blur(10px);
   overflow: hidden;
   pointer-events: none;
 }
-.term-bar {
+.win-bar {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 8px 12px;
+  gap: .55em;
+  padding: .75em 1.1em;
   border-bottom: 1px solid var(--line-soft);
-  font-size: .58rem;
-  letter-spacing: .14em;
-  text-transform: uppercase;
+  font-size: .86em;
+  letter-spacing: .04em;
 }
-.term-bar i { width: 6px; height: 6px; border-radius: 50%; background: rgba(244, 245, 247, .16); }
-.term-bar span { margin-left: auto; opacity: .7; }
-.term-body { padding: 10px 12px 12px; min-height: 7.6em; white-space: nowrap; }
-.tl { display: block; }
-.tl .p { color: var(--accent); margin-right: .6em; }
-.tl .ok { color: var(--accent); margin-right: .6em; }
-.tl .t { color: var(--text); }
-.tl.dim .t { color: var(--text-2); }
+.win-bar i { width: .66em; height: .66em; border-radius: 50%; background: rgba(244, 245, 247, .16); }
+.win-tab { margin-left: .7em; padding: .1em .8em; border-radius: .55em; background: rgba(142, 197, 255, .1); color: var(--text); }
+.win-url { margin-left: .7em; flex: 1; padding: .1em .9em; border-radius: 99px; background: rgba(244, 245, 247, .05); text-align: center; }
+
+/* editor */
+.ide { left: 0; top: 2%; width: 68%; }
+.code { padding: .9em 1.2em 1.1em 0; min-height: 19.4em; white-space: nowrap; }
+.row { display: flex; }
+.row b { flex: none; width: 3.1em; padding-right: 1.3em; text-align: right; font-weight: 400; color: rgba(146, 151, 162, .4); }
+.row .c { white-space: pre; }
+.t-k { color: #7fb0ff; }
+.t-s { color: #bfe3ff; }
+.t-f { color: var(--text); }
+.t-p { color: #7a808c; }
+.t-r { color: #9fb4d0; }
+.t-c { color: #5b6270; font-style: italic; }
 .cur {
   display: inline-block;
   width: .55em;
-  height: 1.05em;
-  margin-left: 2px;
-  vertical-align: -.18em;
+  height: 1.1em;
+  margin-left: 1px;
+  vertical-align: -.2em;
   background: var(--accent);
   animation: blink 1.05s steps(1) infinite;
 }
-.term .live { animation: ping-soft 2.4s ease-in-out infinite; }
-@keyframes blink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0; } }
-@keyframes ping-soft { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
-@media (max-width: 899px) { .term { display: none; } }
-/* WebGL layer — when it is running, the CSS tunnel below stays as a static fallback */
-.gl {
+
+/* live preview */
+.pv { right: 0; bottom: 1%; width: 45%; }
+.pv-body { display: grid; gap: .9em; padding: 1.1em; }
+.pv-nav { display: flex; align-items: center; gap: .5em; }
+.pv-nav i { width: 1.1em; height: 1.1em; border-radius: .35em; background: var(--accent); }
+.pv-nav u { display: block; height: .45em; width: 2.2em; border-radius: 9px; background: rgba(244, 245, 247, .2); }
+.pv-nav u:first-of-type { margin-left: auto; }
+.pv-h { height: 1em; width: 82%; border-radius: .5em; background: rgba(244, 245, 247, .88); }
+.pv-h.s { height: .62em; width: 58%; margin-top: .55em; background: rgba(244, 245, 247, .32); }
+.pv-btn { width: 36%; height: 1.7em; margin-top: .3em; border-radius: 99px; background: rgba(142, 197, 255, .22); border: 1px solid rgba(142, 197, 255, .5); }
+.pv-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6em; }
+.pv-card { position: relative; height: 4.8em; border: 1px solid var(--line); border-radius: .7em; background: rgba(255, 255, 255, .03); overflow: hidden; }
+.pv-card i {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transition: opacity 1.4s ease;
+  left: .55em; right: .55em; bottom: .55em;
+  height: calc(var(--h) * 62%);
+  border-radius: .35em;
+  background: linear-gradient(180deg, var(--accent), rgba(79, 140, 255, .22));
+  transform: scaleY(0);
+  transform-origin: bottom;
+}
+
+/* build-up: elements wait for the code that "creates" them */
+[data-s] { opacity: 0; transform: translateY(.6em); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.visual.s1 [data-s="1"],
+.visual.s2 [data-s="2"],
+.visual.s3 [data-s="3"],
+.visual.s4 [data-s="4"] { opacity: 1; transform: none; }
+.visual.s2 .pv-card i { transform: scaleY(1); transition: transform 1.2s var(--ease) calc(var(--d) * 1s); }
+.visual.s4 .pv-btn { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 1.6em rgba(142, 197, 255, .45); transition: all .8s var(--ease); }
+
+/* status chips */
+.chip {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: .65em;
+  padding: .6em 1em;
+  border-radius: 99px;
+  font: 500 calc(var(--fs) * .92)/1 var(--font-mono);
+  letter-spacing: .03em;
+  white-space: nowrap;
+  color: var(--text);
+  background: rgba(16, 19, 26, .72);
+  border: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
   pointer-events: none;
 }
-.gl-ready .gl { opacity: 1; }
-.gl-ready .scene { visibility: hidden; }
-.scene {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: grid;
-  place-items: center;
-  perspective: 170cqw;
-  perspective-origin: 50% 50%;
-}
-.halo {
-  position: absolute;
-  inset: -8% -4%;
-  background:
-    radial-gradient(38% 46% at 50% 50%, rgba(142, 197, 255, .20), transparent 70%),
-    radial-gradient(60% 60% at 50% 55%, rgba(79, 140, 255, .14), transparent 75%);
-  animation: breathe 9s ease-in-out infinite;
-}
-.cam, .sway, .tunnel { transform-style: preserve-3d; }
-.cam {
-  /* pointer-driven offset, eased */
-  --px: 0deg; --py: 0deg;
-  transform: rotateX(var(--px)) rotateY(var(--py));
-  transition: transform .9s var(--ease);
-}
-.sway { animation: sway 20s ease-in-out infinite alternate; }
-.tunnel {
-  position: relative;
-  width: 56cqw;
-  aspect-ratio: 1;
-}
-.layer {
-  --o: max(.07, calc(.92 - var(--i) * .036));
-  --k: calc(var(--i) / 24 * 100%);
-  position: absolute;
-  inset: 0;
-  opacity: var(--o);
-  transform: translateZ(calc(var(--i) * -3.4cqw));
-  animation: glint 7s cubic-bezier(.4, 0, .2, 1) calc(var(--i) * .14s + 2s) infinite;
-}
-.layer svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  fill: rgba(142, 197, 255, .018);
-  stroke: var(--accent);
-  stroke: color-mix(in srgb, #F4F9FF, #4F8CFF var(--k));
-  stroke-width: 1;
-  stroke-linejoin: round;
-  animation: emerge 1.5s var(--ease) calc(var(--i) * .05s + .25s) both;
-}
-.layer.front { --o: 1; animation: none; transform: translateZ(0); }
-.layer.front svg { fill: none; stroke: none; animation: emerge 1.4s var(--ease) .1s both; }
-.front .d-fill  { fill: rgba(12, 18, 30, .6); stroke: none; }
-.front .d-glow  { fill: none; stroke: var(--accent); stroke-opacity: .22; stroke-width: 9; }
-.front .d-line  { fill: none; stroke: #fff; stroke-width: 2.2; }
-.front .d-slash { fill: none; stroke: var(--accent); stroke-width: 2.2; stroke-linecap: round; }
-.front .d-slash-glow { fill: none; stroke: var(--accent); stroke-opacity: .3; stroke-width: 8; stroke-linecap: round; }
+.chip .ok { color: var(--accent); }
+.chip-git { right: 1%; top: 4%; color: var(--text-2); }
+.chip-build { right: 0; top: 17%; }
+.chip-deploy { left: 0; bottom: 6%; gap: .9em; }
+.dp { position: relative; width: 7.5em; height: 3px; border-radius: 3px; background: rgba(244, 245, 247, .12); overflow: hidden; }
+.dp-fill { position: absolute; inset: 0; border-radius: 3px; background: linear-gradient(90deg, rgba(142, 197, 255, .3), var(--accent)); transform: scaleX(0); transform-origin: left; }
+.visual.s4 .dp-fill { transform: scaleX(1); transition: transform 2.8s cubic-bezier(.3, .6, .2, 1); }
+.dot-live { width: .6em; height: .6em; border-radius: 50%; background: var(--accent); animation: ping-soft 2.2s ease-in-out infinite; }
 
 /* 7. COUNTDOWN ------------------------------------------------------------- */
 .launch {
@@ -554,9 +548,8 @@ h1 .accent {
 
 @keyframes rise  { from { opacity: 0; transform: translate3d(0, 18px, 0); } to { opacity: 1; transform: none; } }
 @keyframes breathe { 0%, 100% { opacity: .75; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
-@keyframes sway   { from { transform: rotateY(-31deg) rotateX(7deg) rotateZ(-1deg); } to { transform: rotateY(-15deg) rotateX(13deg) rotateZ(1deg); } }
-@keyframes emerge { from { opacity: 0; transform: translateZ(8cqw) scale(.94); } to { opacity: 1; transform: none; } }
-@keyframes glint  { 0%, 100% { opacity: var(--o); } 7% { opacity: 1; } 26% { opacity: var(--o); } }
+@keyframes blink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0; } }
+@keyframes ping-soft { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
 @keyframes ping  { 0% { transform: scale(.6); opacity: .7; } 70%, 100% { transform: scale(1.7); opacity: 0; } }
 @keyframes sheen { from { transform: translate3d(-7%, 0, 0); } to { transform: translate3d(7%, 0, 0); } }
 
@@ -583,7 +576,7 @@ h1 .accent {
   .visual {
     order: -1;
     justify-self: center;
-    width: min(92%, 420px, 36svh);
+    width: min(100%, 420px, 40svh);
     min-width: 240px;
   }
   .lede { max-width: 34ch; }
@@ -653,57 +646,43 @@ h1 .accent {
         <p class="lede reveal" style="--d:420ms" data-i18n="desc">Akıllı yazılım çözümleri, özenle tasarlanmış dijital deneyimler ve güçlü markalar üzerinde çalışıyoruz. DYNVEL çok yakında yayında.</p>
       </div>
 
-      <div class="visual reveal" style="--d:300ms" aria-hidden="true">
-        <!-- The DYNVEL "D" extruded into depth: contour layers receding into a tunnel, lit by a slow travelling pulse. -->
-        <svg width="0" height="0" style="position:absolute" focusable="false">
-          <defs><path id="d-shape" d="M30 20H100A90 90 0 0 1 100 200H30Z"/></defs>
-        </svg>
-        <canvas class="gl" id="gl"></canvas>
-        <div class="term reveal" style="--d:1100ms" id="term">
-          <div class="term-bar"><i></i><i></i><i></i><span>dynvel — zsh</span></div>
-          <div class="term-body">
-            <span class="tl"><span class="p">$</span><span class="t">dynvel build --release</span></span>
-            <span class="tl dim"><span class="ok">✓</span><span class="t">interface compiled</span></span>
-            <span class="tl dim"><span class="ok">✓</span><span class="t">services linked</span></span>
-            <span class="tl"><span class="ok live">●</span><span class="t" data-live="1">launch in T-—d</span></span>
+      <div class="visual reveal s1 s2 s3 s4" style="--d:300ms" id="vis" aria-hidden="true">
+        <div class="halo"></div>
+
+        <div class="win ide">
+          <div class="win-bar"><i></i><i></i><i></i><span class="win-tab">launch.ts</span></div>
+          <div class="code">
+              <div class="row"><b>1</b><span class="c"><span class="t-k">import</span><span class="t-p"> { </span><span class="t-f">Studio</span><span class="t-p"> } </span><span class="t-k">from</span><span class="t-p"> </span><span class="t-s">"dynvel"</span><span class="t-p">;</span></span></div>
+              <div class="row"><b>2</b><span class="c"></span></div>
+              <div class="row"><b>3</b><span class="c"><span class="t-k">const</span><span class="t-f"> launch</span><span class="t-p"> = </span><span class="t-k">new</span><span class="t-p"> </span><span class="t-f">Studio</span><span class="t-p">({</span></span></div>
+              <div class="row"><b>4</b><span class="c"><span class="t-p">  </span><span class="t-r">name</span><span class="t-p">: </span><span class="t-s">"DYNVEL"</span><span class="t-p">,</span></span></div>
+              <div class="row"><b>5</b><span class="c"><span class="t-p">  </span><span class="t-r">craft</span><span class="t-p">: [</span><span class="t-s">"software"</span><span class="t-p">, </span><span class="t-s">"design"</span><span class="t-p">],</span></span></div>
+              <div class="row"><b>6</b><span class="c"><span class="t-p">  </span><span class="t-r">date</span><span class="t-p">: </span><span class="t-s">"2027-05-01"</span><span class="t-p">,</span></span></div>
+              <div class="row"><b>7</b><span class="c"><span class="t-p">});</span></span></div>
+              <div class="row"><b>8</b><span class="c"></span></div>
+              <div class="row"><b>9</b><span class="c"><span class="t-f">launch</span><span class="t-p">.</span><span class="t-f">build</span><span class="t-p">();</span></span></div>
+              <div class="row"><b>10</b><span class="c"><span class="t-c">// ui · services · brand</span></span></div>
+              <div class="row"><b>11</b><span class="c"><span class="t-k">await</span><span class="t-f"> launch</span><span class="t-p">.</span><span class="t-f">deploy</span><span class="t-p">();</span></span></div>
           </div>
         </div>
-        <div class="scene">
-          <div class="halo"></div>
-          <div class="cam" id="cam"><div class="sway"><div class="tunnel">
-            <div class="layer front" style="--i:0"><svg viewBox="0 0 220 220">
-              <path class="d-fill" d="M30 20H100A90 90 0 0 1 100 200H30Z"/>
-              <path class="d-glow" d="M30 20H100A90 90 0 0 1 100 200H30Z" stroke-linejoin="round"/>
-              <path class="d-line" d="M30 20H100A90 90 0 0 1 100 200H30Z" stroke-linejoin="round"/>
-              <path class="d-slash-glow" d="M30 200 104 20"/>
-              <path class="d-slash" d="M30 200 104 20"/>
-            </svg></div>
-            <div class="layer" style="--i:1"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:2"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:3"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:4"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:5"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:6"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:7"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:8"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:9"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:10"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:11"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:12"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:13"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:14"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:15"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:16"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:17"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:18"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:19"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:20"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:21"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:22"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:23"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-            <div class="layer" style="--i:24"><svg viewBox="0 0 220 220"><use href="#d-shape"/></svg></div>
-          </div></div></div>
+
+        <span class="chip chip-git"><span class="dot-live"></span>main</span>
+        <span class="chip chip-build" data-s="3"><span class="ok">✓</span>build passing</span>
+
+        <div class="win pv">
+          <div class="win-bar"><i></i><i></i><i></i><span class="win-url">dynvel.com</span></div>
+          <div class="pv-body">
+            <div class="pv-nav"><i></i><u></u><u></u><u></u></div>
+            <div data-s="1"><div class="pv-h"></div><div class="pv-h s"></div><div class="pv-btn"></div></div>
+            <div class="pv-cards" data-s="2">
+              <div class="pv-card"><i style="--h:.55;--d:.0"></i></div>
+              <div class="pv-card"><i style="--h:.85;--d:.15"></i></div>
+              <div class="pv-card"><i style="--h:.65;--d:.3"></i></div>
+            </div>
+          </div>
         </div>
+
+        <span class="chip chip-deploy" data-s="4"><span class="ok">↗</span>deploy · edge<span class="dp"><span class="dp-fill"></span></span></span>
       </div>
     </main>
 
@@ -893,23 +872,6 @@ h1 .accent {
       try { localStorage.setItem('dynvel-lang', next); } catch (e) { /* ignore */ }
     });
 
-    // subtle camera drift that follows the pointer (fine pointers only)
-    const cam = $('cam');
-    const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
-    if (cam && fine.matches) {
-      let raf = 0;
-      window.addEventListener('pointermove', (e) => {
-        if (reduceMotion.matches || raf) return;
-        raf = requestAnimationFrame(() => {
-          raf = 0;
-          const x = e.clientX / window.innerWidth - .5;
-          const y = e.clientY / window.innerHeight - .5;
-          cam.style.setProperty('--py', (x * 9).toFixed(2) + 'deg');
-          cam.style.setProperty('--px', (-y * 6).toFixed(2) + 'deg');
-        });
-      }, { passive: true });
-    }
-
     document.addEventListener('visibilitychange', () => { if (!document.hidden && !live) render(Date.now()); });
 
     render(Date.now());
@@ -920,240 +882,58 @@ h1 .accent {
 })();
 
 /* ==========================================================================
-   Signature visual — a single fragment shader (no libraries).
-   Liquid light inside the DYNVEL "D", with chromatic contour echoes.
-   Falls back to the CSS tunnel if WebGL is unavailable.
+   Signature visual — the code editor "builds" the live preview next to it.
+   The full markup is static; this only replays it as a typing loop.
    ========================================================================== */
 (() => {
   'use strict';
-  const canvas = document.getElementById('gl');
-  if (!canvas) return;
+  const vis = document.getElementById('vis');
+  if (!vis) return;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: false, powerPreference: 'low-power' });
-  if (!gl) return;
-
-  const VERT = 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}';
-  const FRAG = `
-precision highp float;
-uniform vec2 uRes; uniform float uTime; uniform float uIntro; uniform vec2 uMouse;
-
-float hash(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
-float noise(vec2 p){
-  vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);
-  return mix(mix(hash(i), hash(i + vec2(1., 0.)), f.x), mix(hash(i + vec2(0., 1.)), hash(i + vec2(1., 1.)), f.x), f.y);
-}
-float fbm(vec2 p){
-  float v = 0., a = .5;
-  for (int i = 0; i < 4; i++) { v += a * noise(p); p = p * 2.03 + vec2(1.7, 9.2); a *= .5; }
-  return v;
-}
-float sdBox(vec2 p, vec2 b){ vec2 d = abs(p) - b; return length(max(d, 0.)) + min(max(d.x, d.y), 0.); }
-float sdSeg(vec2 p, vec2 a, vec2 b){ vec2 pa = p - a, ba = b - a; float h = clamp(dot(pa, ba) / dot(ba, ba), 0., 1.); return length(pa - ba * h); }
-
-/* the D: rounded box + half disc, centred */
-float sdD(vec2 p){
-  p += vec2(.06, 0.);
-  float box = sdBox(p - vec2(-.17, 0.), vec2(.17, .46));
-  float disc = max(length(p) - .46, -p.x);
-  float k = .05;
-  float h = clamp(.5 + .5 * (disc - box) / k, 0., 1.);
-  return mix(disc, box, h) - k * h * (1. - h);
-}
-
-float contour(float dd, float shift){
-  float l = abs(fract(dd * 13. * shift - uTime * .035) - .5);
-  return smoothstep(.455, .5, l);
-}
-
-void main(){
-  vec2 uv0 = (gl_FragCoord.xy - .5 * uRes) / uRes.y;
-  vec2 uv = uv0 * 1.32 / mix(.86, 1., uIntro);
-  float t = uTime * .11;
-  vec2 p = uv + uMouse * .018;
-  float px = 1.32 / uRes.y;
-
-  float d = sdD(p);
-
-  /* liquid light field: domain-warped fbm */
-  vec2 q = p * 1.7;
-  float f1 = fbm(q + vec2(t, -t * .7));
-  float f2 = fbm(q * 1.25 + f1 * 1.9 + vec2(-t * .8, t * .5));
-  float f3 = fbm(q * .8 + f2 * 2.3 + t * .6);
-
-  vec3 c0 = vec3(.012, .028, .075);
-  vec3 c1 = vec3(.10, .27, .82);
-  vec3 c2 = vec3(.52, .78, 1.);
-  vec3 c3 = vec3(.96, .98, 1.);
-  vec3 col = mix(c0, c1, smoothstep(.18, .62, f3));
-  col = mix(col, c2, smoothstep(.55, .92, f2) * .6);
-  col = mix(col, c3, smoothstep(.85, 1.1, f3 * f2 * 2.4) * .8);
-
-  float inside = 1. - smoothstep(-px, px, d);
-
-  /* glass thickness: deeper inside = darker, edges catch light */
-  float depth = smoothstep(0., -.16, d);
-  vec3 body = col * (1.05 - .55 * depth);
-
-  /* bevel light from a direction that follows the pointer a little */
-  vec2 e = vec2(.004, 0.);
-  vec2 n = normalize(vec2(sdD(p + e.xy) - sdD(p - e.xy), sdD(p + e.yx) - sdD(p - e.yx)) + 1e-5);
-  float lit = max(dot(n, normalize(vec2(-.55, .8) + uMouse * .6)), 0.);
-  float edge = exp(-abs(d) * 34.) * step(d, 0.);
-  body += vec3(.6, .82, 1.) * pow(lit, 2.5) * edge * 1.4;
-  body += vec3(.9, .96, 1.) * exp(-abs(d + .006) * 160.) * .9;
-
-  /* the slash: a clean cut through the glass, with lit edges */
-  vec2 pd = p + vec2(.06, 0.);
-  float sd = sdSeg(pd, vec2(-.40, -.46), vec2(-.03, .46));
-  body *= 1. - (1. - smoothstep(.004, .011, sd)) * .92;
-  body += vec3(.7, .88, 1.) * exp(-abs(sd - .011) * 190.) * .75 * step(d, 0.);
-
-  /* outside: soft bloom + chromatic contour echoes */
-  float dd = max(d, 0.);
-  float fade = exp(-dd * 5.2);
-  vec3 echo = vec3(contour(dd, 1.012), contour(dd, 1.), contour(dd, .988));
-  vec3 tint = mix(vec3(.35, .6, 1.), col, .45);
-  vec3 outside = echo * tint * fade * .75 + mix(c1, col, .25) * exp(-dd * 8.) * .3;
-
-  vec3 rgb = mix(outside, body, inside);
-
-  /* soft vignette so nothing hard-clips at the canvas edge */
-  float ex = .5 * uRes.x / uRes.y - abs(uv0.x);
-  rgb *= smoothstep(0., .16, min(ex, .5 - abs(uv0.y)));
-  rgb *= uIntro;
-
-  float m = max(rgb.r, max(rgb.g, rgb.b));
-  rgb = max(rgb + (hash(gl_FragCoord.xy + uTime) - .5) * .02 * smoothstep(0., .15, m), 0.);
-  gl_FragColor = vec4(rgb, clamp(max(rgb.r, max(rgb.g, rgb.b)), 0., 1.));
-}`;
-
-  const sh = (type, src) => {
-    const o = gl.createShader(type); gl.shaderSource(o, src); gl.compileShader(o);
-    return gl.getShaderParameter(o, gl.COMPILE_STATUS) ? o : null;
-  };
-  const vs = sh(gl.VERTEX_SHADER, VERT), fs = sh(gl.FRAGMENT_SHADER, FRAG);
-  if (!vs || !fs) return;
-  const prog = gl.createProgram();
-  gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
-  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
-  gl.useProgram(prog);
-
-  const buf = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-  const loc = gl.getAttribLocation(prog, 'a');
-  gl.enableVertexAttribArray(loc);
-  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-
-  const U = {
-    res: gl.getUniformLocation(prog, 'uRes'), time: gl.getUniformLocation(prog, 'uTime'),
-    intro: gl.getUniformLocation(prog, 'uIntro'), mouse: gl.getUniformLocation(prog, 'uMouse')
-  };
-  gl.clearColor(0, 0, 0, 0);
-
-  let w = 0, h = 0;
-  function resize() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    let cw = Math.max(1, Math.round(canvas.clientWidth * dpr));
-    let ch = Math.max(1, Math.round(canvas.clientHeight * dpr));
-    const cap = 1100000 / (cw * ch);               // keep the pixel budget modest
-    if (cap < 1) { cw = Math.round(cw * Math.sqrt(cap)); ch = Math.round(ch * Math.sqrt(cap)); }
-    if (cw !== w || ch !== h) { w = canvas.width = cw; h = canvas.height = ch; gl.viewport(0, 0, w, h); }
-  }
-
-  const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
-  const t0 = performance.now();
-  let raf = 0, visible = true;
-
-  function draw(now) {
-    raf = 0;
-    resize();
-    const el = (now - t0) / 1000;
-    mouse.x += (mouse.tx - mouse.x) * .05; mouse.y += (mouse.ty - mouse.y) * .05;
-    const intro = reduce.matches ? 1 : Math.min(1, el / 2.2);
-    const eased = 1 - Math.pow(1 - intro, 3);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.uniform2f(U.res, w, h);
-    gl.uniform1f(U.time, reduce.matches ? 12 : el + 12);
-    gl.uniform1f(U.intro, eased);
-    gl.uniform2f(U.mouse, mouse.x, mouse.y);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
-    if (!reduce.matches && visible && !document.hidden) raf = requestAnimationFrame(draw);
-  }
-  const kick = () => { if (!raf) raf = requestAnimationFrame(draw); };
-
-  draw(performance.now());
-  document.documentElement.classList.add('gl-ready');
-
-  if ('ResizeObserver' in window) new ResizeObserver(kick).observe(canvas);
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver((e) => { visible = e[0].isIntersecting; if (visible) kick(); }).observe(canvas);
-  }
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) kick(); });
-  reduce.addEventListener && reduce.addEventListener('change', kick);
-
-  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    window.addEventListener('pointermove', (e) => {
-      mouse.tx = e.clientX / window.innerWidth - .5;
-      mouse.ty = -(e.clientY / window.innerHeight - .5);
-      if (!reduce.matches) kick();
-    }, { passive: true });
-  }
-  canvas.addEventListener('webglcontextlost', (e) => {
-    e.preventDefault(); cancelAnimationFrame(raf); document.documentElement.classList.remove('gl-ready');
+  const lines = [...vis.querySelectorAll('.row .c')].map((el) => {
+    const spans = [...el.children];
+    return { el, spans, texts: spans.map((s) => s.textContent) };
   });
-})();
-
-/* Terminal card: types a short build log on a loop (static text if motion is reduced). */
-(() => {
-  'use strict';
-  const term = document.getElementById('term');
-  if (!term) return;
-  const rows = [...term.querySelectorAll('.tl')];
-  const texts = rows.map((r) => r.querySelector('.t'));
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const days = () => {
-    const t = Number(document.documentElement.dataset.launch);
-    return t ? Math.max(0, Math.floor((t - Date.now()) / 864e5)) : null;
-  };
-  const full = () => texts.map((el) => {
-    if (el.dataset.live) { const d = days(); return d === null ? el.textContent : (d > 0 ? 'launch in T-' + d + 'd' : 'live'); }
-    return el.dataset.full || el.textContent;
-  });
-  texts.forEach((el) => { el.dataset.full = el.textContent; });
+  if (reduce.matches || !lines.length) return;              // leave the finished, static state
 
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const cur = document.createElement('i');
   cur.className = 'cur';
+  // a step class is added once the line that "creates" the element is finished
+  const stepAfter = { 6: 's1', 8: 's2', 9: 's3', 10: 's4' };
+  const ALL = ['s1', 's2', 's3', 's4'];
 
-  function showStatic() {
-    const f = full();
-    texts.forEach((el, i) => { el.textContent = f[i]; });
-    rows[rows.length - 1].appendChild(cur);
+  function paint(line, n) {
+    let left = n;
+    line.spans.forEach((s, i) => {
+      const t = line.texts[i];
+      s.textContent = t.slice(0, Math.max(0, Math.min(t.length, left)));
+      left -= t.length;
+    });
   }
-  if (reduce.matches) { showStatic(); return; }
+  const total = (line) => line.texts.reduce((a, t) => a + t.length, 0);
 
-  async function run() {
+  async function loop() {
     for (;;) {
-      const f = full();
-      texts.forEach((el) => { el.textContent = ''; });
-      rows.forEach((r) => { r.style.visibility = 'hidden'; });
-      await sleep(1700);
-      for (let i = 0; i < rows.length; i++) {
-        rows[i].style.visibility = 'visible';
-        rows[i].appendChild(cur);
-        for (let c = 1; c <= f[i].length; c++) {
-          texts[i].textContent = f[i].slice(0, c);
-          await sleep(i === 0 ? 55 : 28);
+      vis.classList.remove(...ALL);
+      lines.forEach((l) => paint(l, 0));
+      await sleep(1600);
+      for (let i = 0; i < lines.length; i++) {
+        const l = lines[i], n = total(l);
+        l.el.appendChild(cur);
+        for (let c = 1; c <= n; c++) {
+          paint(l, c);
+          await sleep(24);
           while (document.hidden) await sleep(500);
         }
-        await sleep(i === 0 ? 650 : 380);
+        if (stepAfter[i]) vis.classList.add(stepAfter[i]);
+        await sleep(n ? 260 : 120);
       }
-      await sleep(6500);
-      if (reduce.matches) { showStatic(); return; }
+      await sleep(8000);
+      if (reduce.matches) { lines.forEach((l) => paint(l, total(l))); vis.classList.add(...ALL); return; }
     }
   }
-  run();
+  loop();
 })();
 </script>
 </body>
