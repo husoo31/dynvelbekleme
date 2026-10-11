@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DYNVEL — Çok Yakında</title>
+<meta name="description" content="DYNVEL; akıllı yazılım çözümleri, özenle tasarlanmış dijital deneyimler ve güçlü markalar üzerine kurulu yeni nesil bir dijital stüdyo. Çok yakında yayında.">
+<meta name="theme-color" content="#08090B">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="DYNVEL — Çok Yakında">
+<meta property="og:description" content="Yeni nesil bir dijital stüdyo. Çok yakında yayında.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%2308090B'/%3E%3Cpath d='M6 5h5.5a7 7 0 0 1 0 14H6z' fill='none' stroke='%23F4F5F7' stroke-width='1.6'/%3E%3Cpath d='M6 19 12 5' stroke='%238EC5FF' stroke-width='1.6'/%3E%3C/svg%3E">
+
+<!-- Optional web fonts. If they fail to load, the system font stacks below take over. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+/* ==========================================================================
+   DYNVEL — Coming soon
+   1. Tokens  2. Base  3. Background  4. Layout  5. Hero  6. Visual
+   7. Countdown  8. Footer  9. Motion  10. Responsive
+   ========================================================================== */
+
+/* 1. TOKENS ---------------------------------------------------------------- */
+:root {
+  --bg: #08090B;
+  --bg-2: #101216;
+  --surface: #15181E;
+  --text: #F4F5F7;
+  --text-2: #9297A2;
+  --line: rgba(244, 245, 247, .11);
+  --line-soft: rgba(244, 245, 247, .06);
+  --accent: #8EC5FF;
+  --accent-2: #4F8CFF;
+
+  --font-sans: "Inter Tight", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* 4px-based spacing scale */
+  --s1: .25rem; --s2: .5rem; --s3: .75rem; --s4: 1rem; --s5: 1.5rem;
+  --s6: 2rem; --s7: 3rem; --s8: 4rem; --s9: 6rem;
+
+  --gutter: clamp(1.25rem, 4.5vw, 4rem);
+  --maxw: 1320px;
+
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --t-fast: .2s;
+  --t-med: .6s;
+  --t-enter: .95s;
+}
+
+/* 2. BASE ------------------------------------------------------------------ */
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  background: var(--bg);
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100svh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+h1, p { margin: 0; }
+::selection { background: rgba(142, 197, 255, .28); color: #fff; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* 3. BACKGROUND — layered, fixed so it never stretches with scroll --------- */
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(60% 55% at 74% 38%, rgba(79, 140, 255, .13), transparent 70%),
+    radial-gradient(45% 40% at 8% 105%, rgba(142, 197, 255, .06), transparent 70%),
+    radial-gradient(120% 90% at 50% 0%, var(--bg-2), var(--bg) 62%);
+}
+/* hairline grid, faded toward the edges */
+.bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(244, 245, 247, .035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(244, 245, 247, .035) 1px, transparent 1px);
+  background-size: 88px 88px;
+  background-position: center top;
+  -webkit-mask-image: radial-gradient(70% 65% at 68% 42%, #000 15%, transparent 78%);
+          mask-image: radial-gradient(70% 65% at 68% 42%, #000 15%, transparent 78%);
+}
+/* film grain */
+.bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+/* slow light refraction */
+.sheen {
+  position: absolute;
+  inset: -20% -30%;
+  background: linear-gradient(112deg, transparent 38%, rgba(142, 197, 255, .045) 48%, rgba(142, 197, 255, .02) 52%, transparent 62%);
+  animation: sheen 32s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 100% at 50% 50%, transparent 55%, rgba(0, 0, 0, .45) 100%);
+}
+
+/* 4. LAYOUT ---------------------------------------------------------------- */
+.stage {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  padding-inline: max(var(--gutter), env(safe-area-inset-left)) max(var(--gutter), env(safe-area-inset-right));
+  padding-top: max(var(--s5), env(safe-area-inset-top));
+  padding-bottom: max(var(--s5), env(safe-area-inset-bottom));
+  overflow: hidden;
+  overflow: clip;
+}
+.stage > * {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+}
+
+/* Header */
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s4);
+  min-height: 44px;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s3);
+  color: var(--text);
+}
+.brand svg { width: 28px; height: 28px; flex: none; }
+.brand .mark-slash { stroke: var(--accent); }
+.wordmark {
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: .3em;
+  margin-right: -.3em; /* optically cancel trailing tracking */
+  line-height: 1;
+}
+.top-end {
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+}
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s3);
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.dot {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  opacity: 0;
+  animation: ping 3.2s var(--ease) infinite;
+}
+.lang {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 var(--s3);
+  font: 500 .7rem/1 var(--font-mono);
+  letter-spacing: .18em;
+  color: var(--text-2);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: color var(--t-fast) ease, border-color var(--t-fast) ease, background-color var(--t-fast) ease, transform var(--t-fast) var(--ease);
+}
+.lang:hover { color: var(--text); border-color: rgba(142, 197, 255, .5); background: rgba(142, 197, 255, .06); }
+.lang:active { transform: scale(.96); }
+
+/* 5. HERO ------------------------------------------------------------------ */
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
+  align-items: center;
+  gap: var(--s7);
+  padding-block: var(--s6);
+}
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.eyebrow::before {
+  content: "";
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent));
+}
+h1 {
+  margin-top: var(--s5);
+  font-weight: 500;
+  font-size: clamp(3.1rem, min(8.4vw, 15svh), 7.6rem);
+  line-height: .96;
+  letter-spacing: -.04em;
+  text-wrap: balance;
+}
+h1 span { display: block; }
+h1 .accent {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.1em;
+  letter-spacing: -.02em;
+  line-height: .92;
+  background: linear-gradient(180deg, #fff 30%, var(--accent) 130%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--text); /* fallback */
+  padding: 0 .08em .14em 0; /* room for italic overhang and descenders under background-clip */
+  margin-bottom: -.14em;
+}
+.lede {
+  margin-top: var(--s6);
+  max-width: 40ch;
+  font-size: clamp(1rem, .55vw + .88rem, 1.2rem);
+  line-height: 1.6;
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+
+/* 6. SIGNATURE VISUAL — exploded software stack (UI / Logic / Data) ------- */
+.visual {
+  justify-self: end;
+  width: min(100%, 640px, 58svh);
+  aspect-ratio: 5 / 4;
+}
+.visual svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.ln { fill: none; stroke: var(--text); }
+.ln-accent { fill: none; stroke: var(--accent); }
+.ns { vector-effect: non-scaling-stroke; }
+.tag-t { font: 500 10px/1 var(--font-mono); letter-spacing: .2em; fill: var(--text-2); }
+.tag-t .acc { fill: var(--accent); }
+
+/* layers assemble once, then breathe out of phase */
+.layer { animation: drop 1.3s var(--ease) var(--d, 0s) both; }
+.bob   { animation: bob 8s ease-in-out var(--b, 0s) infinite alternate; }
+.glow  { animation: breathe 8s ease-in-out infinite; transform-origin: 50% 50%; transform-box: fill-box; }
+
+/* light sweeping through each plane, rising layer by layer */
+.sweep { animation: sweep 7s cubic-bezier(.5, 0, .2, 1) var(--w, 0s) infinite; }
+
+/* typed code lines on the data layer */
+.cl { transform-box: fill-box; transform-origin: left center; animation: typed 11s var(--ease) calc(var(--i) * .28s + 1.4s) infinite; }
+.cursor { animation: blink 1.1s steps(1) infinite; }
+
+/* signals travelling along the logic graph */
+.flow { stroke-dasharray: .12 1; stroke-dashoffset: .12; animation: flow 4.6s linear var(--w, 0s) infinite; }
+
+/* data packets climbing the stack */
+.packet { animation: packet var(--t, 5s) linear var(--w, 0s) infinite; opacity: 0; }
+
+/* floor ripples */
+.ripple { transform-box: fill-box; transform-origin: center; animation: ripple 8s linear var(--w, 0s) infinite; opacity: 0; }
+
+/* 7. COUNTDOWN ------------------------------------------------------------- */
+.launch {
+  margin-top: var(--s4);
+  padding-top: var(--s5);
+  border-top: 1px solid var(--line);
+}
+.launch-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s2) var(--s5);
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.launch-head .lead { display: inline-flex; align-items: center; gap: var(--s3); color: var(--text); }
+.launch-head .target { letter-spacing: .12em; }
+
+.units {
+  margin: var(--s5) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.unit {
+  margin: 0;
+  min-width: 0;
+  transition: color var(--t-fast) ease;
+}
+.unit + .unit {
+  padding-left: clamp(.75rem, 2.6vw, 2.5rem);
+  border-left: 1px solid var(--line);
+}
+.num {
+  display: block;
+  font-weight: 300;
+  font-size: clamp(1.7rem, min(8.6vw, 10.5svh), 5.75rem);
+  line-height: 1;
+  letter-spacing: -.045em;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  white-space: nowrap;
+}
+.unit.is-secs .num { color: var(--accent); }
+.lbl {
+  display: block;
+  margin-top: var(--s3);
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.meter {
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+  margin-top: var(--s5);
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  letter-spacing: .16em;
+  color: var(--text-2);
+}
+.meter-track {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+  overflow: hidden;
+}
+.meter-fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(142, 197, 255, .15), var(--accent));
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 1s var(--ease);
+}
+.meter-val { min-width: 4.5ch; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* 8. FOOTER ---------------------------------------------------------------- */
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s2) var(--s5);
+  margin-top: var(--s6);
+  font-size: .8rem;
+  color: var(--text-2);
+}
+.social {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s3);
+  min-height: 44px;
+  margin-block: calc(var(--s3) * -1);
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: .02em;
+  transition: color var(--t-fast) ease;
+}
+.social svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  transition: transform var(--t-fast) var(--ease), color var(--t-fast) ease;
+}
+.social:hover { color: var(--accent); }
+.social:hover svg { transform: translateY(-2px); }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.foot .tag { font-family: var(--font-serif); font-style: italic; font-size: 1.05rem; color: var(--text-2); }
+
+/* Live state: counter finished */
+[data-state="live"] .num { color: var(--text); }
+[data-state="live"] .unit.is-secs .num { color: var(--accent); }
+
+/* 9. MOTION ---------------------------------------------------------------- */
+.reveal { animation: rise var(--t-enter) var(--ease) var(--d, 0ms) both; }
+
+@keyframes rise  { from { opacity: 0; transform: translate3d(0, 18px, 0); } to { opacity: 1; transform: none; } }
+@keyframes drop   { from { opacity: 0; transform: translate3d(0, -56px, 0); } to { opacity: 1; transform: none; } }
+@keyframes bob    { from { transform: translate3d(0, -5px, 0); } to { transform: translate3d(0, 6px, 0); } }
+@keyframes breathe { 0%, 100% { opacity: .75; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
+@keyframes sweep  { 0% { transform: translateX(-190px); opacity: 0; } 6% { opacity: 1; } 38% { opacity: 1; } 46%, 100% { transform: translateX(190px); opacity: 0; } }
+@keyframes typed  { 0% { transform: scaleX(0); opacity: 1; } 9%, 82% { transform: scaleX(1); opacity: 1; } 95%, 100% { transform: scaleX(1); opacity: 0; } }
+@keyframes blink  { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0; } }
+@keyframes flow   { from { stroke-dashoffset: .12; } to { stroke-dashoffset: -1; } }
+@keyframes packet { 0% { transform: translateY(170px); opacity: 0; } 12%, 85% { opacity: .95; } 100% { transform: translateY(-190px); opacity: 0; } }
+@keyframes ripple { 0% { transform: scale(.3); opacity: 0; } 15% { opacity: .5; } 100% { transform: scale(1.15); opacity: 0; } }
+@keyframes ping  { 0% { transform: scale(.6); opacity: .7; } 70%, 100% { transform: scale(1.7); opacity: 0; } }
+@keyframes sheen { from { transform: translate3d(-7%, 0, 0); } to { transform: translate3d(7%, 0, 0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .packet, .ripple, .sweep { display: none; }
+}
+
+/* 10. RESPONSIVE ----------------------------------------------------------- */
+@media (max-width: 899px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: var(--s8) var(--s7);
+  }
+  /* On narrow screens the visual becomes atmosphere behind the copy */
+  .visual {
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    right: -38%;
+    width: min(125vw, 680px);
+    margin-top: calc(min(125vw, 680px) * -.4);
+    opacity: .3;
+  }
+  .lede { max-width: 34ch; }
+}
+@media (max-width: 599px) {
+  .status { display: none; }
+  .wordmark { font-size: 1.05rem; }
+  .brand svg { width: 24px; height: 24px; }
+  .launch-head .target { width: 100%; }
+  .lbl { letter-spacing: .14em; font-size: .62rem; }
+}
+@media (max-width: 359px) {
+  .lbl { letter-spacing: .08em; }
+}
+@media (min-width: 1600px) {
+  :root { --maxw: 1480px; }
+  .num { font-size: clamp(1.7rem, 10.5svh, 6.5rem); }
+}
+/* Landscape phones / very short viewports: tighten vertical rhythm */
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero { padding-block: var(--s5); }
+  h1 { font-size: clamp(2.4rem, 11svh, 4.5rem); margin-top: var(--s3); }
+  .lede { margin-top: var(--s4); }
+}
+@media (max-height: 520px) and (min-width: 900px) {
+  .visual { width: min(100%, 360px); }
+}
+</style>
+</head>
+
+<body data-state="pending">
+  <div class="bg" aria-hidden="true">
+    <div class="sheen"></div>
+    <div class="vignette"></div>
+  </div>
+
+  <div class="stage">
+    <header class="top">
+      <div class="brand reveal" style="--d:0ms">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="miter">
+          <path d="M5 3.5h6.5a8.5 8.5 0 0 1 0 17H5z"/>
+          <path class="mark-slash" d="M5 20.5 12.2 3.5"/>
+        </svg>
+        <span class="wordmark">DYNVEL</span>
+      </div>
+
+      <div class="top-end reveal" style="--d:120ms">
+        <span class="status" role="status">
+          <span class="dot" aria-hidden="true"></span>
+          <span class="status-text" data-i18n="status">Çok yakında</span>
+        </span>
+        <button class="lang" type="button" id="lang" lang="en" aria-label="Switch to English" title="English">EN</button>
+      </div>
+    </header>
+
+    <main class="hero">
+      <div class="copy">
+        <p class="eyebrow reveal" style="--d:180ms" data-i18n="eyebrow">Yeni nesil dijital stüdyo</p>
+        <h1 class="reveal" style="--d:280ms">
+          <span data-i18n="h1a">Dijitalin</span>
+          <span class="accent" data-i18n="h1b">yeni boyutu.</span>
+        </h1>
+        <p class="lede reveal" style="--d:420ms" data-i18n="desc">Akıllı yazılım çözümleri, özenle tasarlanmış dijital deneyimler ve güçlü markalar üzerinde çalışıyoruz. DYNVEL çok yakında yayında.</p>
+      </div>
+
+      <div class="visual reveal" style="--d:300ms" aria-hidden="true">
+        <!-- Exploded software stack: interface / logic / data, seen in isometric projection. -->
+        <svg viewBox="-300 -240 600 480" focusable="false" id="vis">
+          <defs>
+            <radialGradient id="g-glow">
+              <stop offset="0" stop-color="#4F8CFF" stop-opacity=".30"/>
+              <stop offset=".55" stop-color="#4F8CFF" stop-opacity=".08"/>
+              <stop offset="1" stop-color="#4F8CFF" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="g-plane" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#8EC5FF" stop-opacity=".16"/>
+              <stop offset="1" stop-color="#4F8CFF" stop-opacity=".03"/>
+            </linearGradient>
+            <linearGradient id="g-sweep" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#8EC5FF" stop-opacity="0"/>
+              <stop offset=".7" stop-color="#8EC5FF" stop-opacity=".38"/>
+              <stop offset="1" stop-color="#EAF4FF" stop-opacity=".75"/>
+            </linearGradient>
+            <linearGradient id="g-packet" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" stop-color="#8EC5FF" stop-opacity="0"/>
+              <stop offset="1" stop-color="#EAF4FF" stop-opacity="1"/>
+            </linearGradient>
+            <pattern id="p-grid" width="27" height="27" patternUnits="userSpaceOnUse">
+              <path d="M27 0H0V27" fill="none" stroke="#F4F5F7" stroke-opacity=".1" stroke-width="1"/>
+            </pattern>
+            <clipPath id="c-plane"><rect x="-135" y="-135" width="270" height="270" rx="10"/></clipPath>
+            <g id="plane-base">
+              <rect x="-135" y="-135" width="270" height="270" rx="10" fill="url(#g-plane)"/>
+              <rect x="-135" y="-135" width="270" height="270" rx="10" fill="url(#p-grid)"/>
+              <rect class="ns" x="-135" y="-135" width="270" height="270" rx="10" fill="none" stroke="#F4F5F7" stroke-opacity=".34"/>
+            </g>
+          </defs>
+
+          <!-- ambient light + floor ripples -->
+          <ellipse class="glow" cx="0" cy="10" rx="300" ry="230" fill="url(#g-glow)"/>
+          <g transform="translate(0 170)">
+            <ellipse class="ripple ln-accent ns" rx="300" ry="150" style="--w:0s"/>
+            <ellipse class="ripple ln-accent ns" rx="300" ry="150" style="--w:2.7s"/>
+            <ellipse class="ripple ln-accent ns" rx="300" ry="150" style="--w:5.3s"/>
+          </g>
+
+          <!-- vertical structure -->
+          <path class="ln ns" stroke-opacity=".28" stroke-dasharray="2 6" d="M-191 -130V130 M191 -130V130 M0 -35V225 M0 -130V130"/>
+
+          <!-- DATA · bottom -->
+          <g transform="translate(0 130)"><g class="layer" style="--d:.5s"><g class="bob" style="--b:0s">
+            <path class="ln ns" stroke-opacity=".3" d="M-191 0V8L0 103.5L191 8V0"/>
+            <g transform="matrix(.7071 .35355 -.7071 .35355 0 0)">
+              <use href="#plane-base"/>
+              <g fill="#F4F5F7" fill-opacity=".24">
+                <rect class="cl" style="--i:0"  x="-105" y="-102" width="60"  height="5" rx="2.5" fill="#8EC5FF" fill-opacity=".8"/>
+                <rect class="cl" style="--i:1"  x="-90"  y="-85"  width="110" height="5" rx="2.5"/>
+                <rect class="cl" style="--i:2"  x="-90"  y="-68"  width="75"  height="5" rx="2.5"/>
+                <rect class="cl" style="--i:3"  x="-105" y="-51"  width="40"  height="5" rx="2.5"/>
+                <rect class="cl" style="--i:4"  x="-90"  y="-34"  width="130" height="5" rx="2.5"/>
+                <rect class="cl" style="--i:5"  x="-75"  y="-17"  width="90"  height="5" rx="2.5"/>
+                <rect class="cl" style="--i:6"  x="-75"  y="0"    width="55"  height="5" rx="2.5"/>
+                <rect class="cl" style="--i:7"  x="-90"  y="17"   width="100" height="5" rx="2.5"/>
+                <rect class="cl" style="--i:8"  x="-105" y="34"   width="45"  height="5" rx="2.5" fill="#8EC5FF" fill-opacity=".8"/>
+                <rect class="cl" style="--i:9"  x="-105" y="51"   width="120" height="5" rx="2.5"/>
+                <rect class="cl" style="--i:10" x="-90"  y="68"   width="80"  height="5" rx="2.5"/>
+                <rect class="cl" style="--i:11" x="-105" y="85"   width="30"  height="5" rx="2.5"/>
+              </g>
+              <rect class="cursor" x="-68" y="84" width="7" height="7" rx="1.5" fill="#8EC5FF"/>
+              <g clip-path="url(#c-plane)"><rect class="sweep" style="--w:2.2s" x="-22" y="-135" width="44" height="270" fill="url(#g-sweep)"/></g>
+            </g>
+            <g transform="translate(199 0)">
+              <path class="ln ns" stroke-opacity=".4" d="M0 0H18"/>
+              <text class="tag-t" x="26" y="3.5"><tspan class="acc">01</tspan> DATA</text>
+            </g>
+          </g></g></g>
+
+          <!-- LOGIC · middle -->
+          <g><g class="layer" style="--d:.75s"><g class="bob" style="--b:-2.7s">
+            <path class="ln ns" stroke-opacity=".3" d="M-191 0V8L0 103.5L191 8V0"/>
+            <g transform="matrix(.7071 .35355 -.7071 .35355 0 0)">
+              <use href="#plane-base"/>
+              <path class="ln ns" stroke-opacity=".38" d="M-85 -75L5 -95L95 -35 M-85 -75L-5 5 M-100 15L-5 5L95 -35 M-5 5L90 80 M-5 5L-45 90L-100 15"/>
+              <path class="ln-accent flow" pathLength="1" stroke-width="3" stroke-linecap="round" style="--w:.4s" d="M-85 -75L-5 5L90 80"/>
+              <path class="ln-accent flow" pathLength="1" stroke-width="3" stroke-linecap="round" style="--w:2.6s" d="M-100 15L-5 5L95 -35"/>
+              <g fill="#08090B" stroke="#F4F5F7" stroke-opacity=".6" class="ns">
+                <circle cx="-85" cy="-75" r="5"/>
+                <circle cx="95" cy="-35" r="5"/>
+                <circle cx="-100" cy="15" r="5"/>
+                <circle cx="-45" cy="90" r="5"/>
+              </g>
+              <g fill="#8EC5FF" stroke="none">
+                <circle cx="5" cy="-95" r="6"/>
+                <circle cx="90" cy="80" r="6"/>
+              </g>
+              <circle cx="-5" cy="5" r="14" class="ln-accent ns" style="fill:rgba(142,197,255,.14)"/>
+              <circle cx="-5" cy="5" r="7" fill="#EAF4FF"/>
+              <g clip-path="url(#c-plane)"><rect class="sweep" style="--w:2.7s" x="-22" y="-135" width="44" height="270" fill="url(#g-sweep)"/></g>
+            </g>
+            <g transform="translate(199 0)">
+              <path class="ln ns" stroke-opacity=".4" d="M0 0H18"/>
+              <text class="tag-t" x="26" y="3.5"><tspan class="acc">02</tspan> LOGIC</text>
+            </g>
+          </g></g></g>
+
+          <!-- INTERFACE · top -->
+          <g transform="translate(0 -130)"><g class="layer" style="--d:1s"><g class="bob" style="--b:-5.3s">
+            <path class="ln ns" stroke-opacity=".3" d="M-191 0V8L0 103.5L191 8V0"/>
+            <g transform="matrix(.7071 .35355 -.7071 .35355 0 0)">
+              <use href="#plane-base"/>
+              <g class="ns" fill="#F4F5F7" fill-opacity=".05" stroke="#F4F5F7" stroke-opacity=".3">
+                <rect x="-112" y="-114" width="224" height="16" rx="5"/>
+                <rect x="-112" y="66" width="100" height="44" rx="6"/>
+                <rect x="12" y="66" width="100" height="44" rx="6"/>
+              </g>
+              <g fill="#F4F5F7" fill-opacity=".26">
+                <circle cx="-100" cy="-106" r="2.2"/><circle cx="-91" cy="-106" r="2.2"/><circle cx="-82" cy="-106" r="2.2"/>
+                <rect x="-112" y="-70" width="44" height="5" rx="2.5"/><rect x="-112" y="-58" width="28" height="5" rx="2.5"/>
+                <rect x="70" y="-70" width="42" height="5" rx="2.5"/><rect x="82" y="-58" width="30" height="5" rx="2.5"/>
+                <rect x="-102" y="78" width="60" height="5" rx="2.5"/><rect x="-102" y="90" width="38" height="5" rx="2.5"/>
+                <rect x="22" y="78" width="60" height="5" rx="2.5"/><rect x="22" y="90" width="38" height="5" rx="2.5"/>
+              </g>
+              <g transform="translate(-5 0)">
+                <path class="ln-accent ns" stroke-opacity=".22" stroke-width="12" stroke-linejoin="round" d="M-38 -52h34a52 52 0 0 1 0 104h-34z"/>
+                <path class="ln-accent ns" stroke-width="3.2" stroke-linejoin="round" style="fill:rgba(142,197,255,.1)" d="M-38 -52h34a52 52 0 0 1 0 104h-34z"/>
+                <path class="ln ns" stroke-width="3.2" stroke-linecap="round" d="M-38 52 10 -52"/>
+              </g>
+              <g clip-path="url(#c-plane)"><rect class="sweep" style="--w:3.2s" x="-22" y="-135" width="44" height="270" fill="url(#g-sweep)"/></g>
+            </g>
+            <g transform="translate(199 0)">
+              <path class="ln ns" stroke-opacity=".4" d="M0 0H18"/>
+              <text class="tag-t" x="26" y="3.5"><tspan class="acc">03</tspan> UI</text>
+            </g>
+          </g></g></g>
+
+          <!-- data packets climbing the stack -->
+          <g>
+            <rect class="packet" style="--t:4.8s;--w:.9s"  x="-192" y="0" width="1.6" height="34" fill="url(#g-packet)"/>
+            <rect class="packet" style="--t:5.6s;--w:2.6s" x="190"  y="0" width="1.6" height="34" fill="url(#g-packet)"/>
+            <rect class="packet" style="--t:4.2s;--w:1.8s" x="-.8"  y="0" width="1.6" height="40" fill="url(#g-packet)"/>
+            <rect class="packet" style="--t:6.4s;--w:4.1s" x="-.8"  y="0" width="1.6" height="30" fill="url(#g-packet)"/>
+            <rect class="packet" style="--t:5.2s;--w:3.4s" x="-192" y="0" width="1.6" height="26" fill="url(#g-packet)"/>
+          </g>
+        </svg>
+      </div>
+    </main>
+
+    <section class="launch reveal" style="--d:560ms" aria-labelledby="launch-title">
+      <div class="launch-head">
+        <h2 class="lead" id="launch-title" style="margin:0;font:inherit;letter-spacing:inherit;text-transform:inherit">
+          <span class="dot" aria-hidden="true"></span>
+          <span data-i18n="cap">Lansmana kalan süre</span>
+        </h2>
+        <span class="target" id="target">1 Mayıs 2027, 00:00 (UTC+03:00)</span>
+      </div>
+
+      <div class="units" id="timer" role="timer">
+        <div class="unit"><span class="num" id="n-d">–––</span><span class="lbl" data-i18n="d">Gün</span></div>
+        <div class="unit"><span class="num" id="n-h">––</span><span class="lbl" data-i18n="h">Saat</span></div>
+        <div class="unit"><span class="num" id="n-m">––</span><span class="lbl" data-i18n="m">Dakika</span></div>
+        <div class="unit is-secs"><span class="num" id="n-s">––</span><span class="lbl" data-i18n="s">Saniye</span></div>
+      </div>
+
+      <div class="meter" aria-hidden="true">
+        <span data-i18n="elapsed">Geçen süre</span>
+        <span class="meter-track"><span class="meter-fill" id="fill"></span></span>
+        <span class="meter-val" id="pct">0.0%</span>
+      </div>
+    </section>
+
+    <footer class="foot reveal" style="--d:700ms">
+      <span>© 2026 DYNVEL</span>
+      <a class="social" href="https://www.instagram.com/dynvelsoftware" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="5"/>
+          <circle cx="12" cy="12" r="4.2"/>
+          <circle cx="17.4" cy="6.6" r=".6" fill="currentColor"/>
+        </svg>
+        <span>@dynvelsoftware</span>
+        <span class="sr-only" data-i18n="ig">Instagram’da takip edin (yeni sekmede açılır)</span>
+      </a>
+      <span class="tag">Crafted for what comes next.</span>
+    </footer>
+  </div>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ------------------------------------------------------------------
+     CONFIG — edit these two lines to change the launch date.
+     Dates are absolute instants with an explicit offset (Türkiye: UTC+03:00,
+     no daylight saving), so every visitor counts down to the same moment
+     regardless of their device's time zone.
+     ------------------------------------------------------------------ */
+  const CONFIG = {
+    start:    '2026-10-11T00:00:00+03:00', // page prepared
+    launch:   '2027-05-01T00:00:00+03:00', // 1 May 2027
+    timeZone: 'Europe/Istanbul',
+    tzLabel:  'UTC+03:00'
+  };
+
+  const I18N = {
+    tr: {
+      status: 'Çok yakında', statusLive: 'Yayında',
+      eyebrow: 'Yeni nesil dijital stüdyo',
+      h1a: 'Dijitalin', h1b: 'yeni boyutu.',
+      desc: 'Akıllı yazılım çözümleri, özenle tasarlanmış dijital deneyimler ve güçlü markalar üzerinde çalışıyoruz. DYNVEL çok yakında yayında.',
+      descLive: 'Beklenen an geldi. DYNVEL’in tam deneyimi çok yakında bu adreste sizlerle olacak.',
+      cap: 'Lansmana kalan süre', capLive: 'Geri sayım tamamlandı',
+      d: 'Gün', h: 'Saat', m: 'Dakika', s: 'Saniye',
+      elapsed: 'Geçen süre', target: 'Hedef',
+      ig: 'Instagram’da takip edin (yeni sekmede açılır)',
+      other: 'EN', otherLabel: 'Switch to English', otherTitle: 'English', locale: 'tr-TR'
+    },
+    en: {
+      status: 'Coming soon', statusLive: 'Live',
+      eyebrow: 'A new digital studio',
+      h1a: 'Digital,', h1b: 'redefined.',
+      desc: 'We are building intelligent software, carefully crafted digital experiences and resilient brands. DYNVEL goes live soon.',
+      descLive: 'The moment has arrived. The full DYNVEL experience is arriving at this address very shortly.',
+      cap: 'Time to launch', capLive: 'Countdown complete',
+      d: 'Days', h: 'Hours', m: 'Minutes', s: 'Seconds',
+      elapsed: 'Elapsed', target: 'Target',
+      ig: 'Follow on Instagram (opens in a new tab)',
+      other: 'TR', otherLabel: 'Türkçeye geç', otherTitle: 'Türkçe', locale: 'en-GB'
+    }
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const root = document.documentElement;
+  const launchAt = Date.parse(CONFIG.launch);
+  const startAt  = Date.parse(CONFIG.start);
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  const els = { d: $('n-d'), h: $('n-h'), m: $('n-m'), s: $('n-s'), fill: $('fill'), pct: $('pct') };
+  let lang = 'tr';
+  let live = false;
+
+  /* ---- language ---- */
+  function formatTarget(t) {
+    try {
+      const date = new Intl.DateTimeFormat(t.locale, { timeZone: CONFIG.timeZone, day: 'numeric', month: 'long', year: 'numeric' }).format(launchAt);
+      const time = new Intl.DateTimeFormat(t.locale, { timeZone: CONFIG.timeZone, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(launchAt);
+      return `${t.target}: ${date}, ${time} (${CONFIG.tzLabel})`;
+    } catch (e) {
+      return null; // keep the static fallback in the markup
+    }
+  }
+
+  function applyLang(next) {
+    lang = I18N[next] ? next : 'tr';
+    const t = I18N[lang];
+    root.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      const key = el.getAttribute('data-i18n');
+      const text = (live && t[key + 'Live']) || t[key];
+      if (text != null) el.textContent = text;
+    });
+    const btn = $('lang');
+    btn.textContent = t.other;
+    btn.setAttribute('aria-label', t.otherLabel);
+    btn.title = t.otherTitle;
+    btn.lang = lang === 'tr' ? 'en' : 'tr';
+    const target = formatTarget(t);
+    if (target) $('target').textContent = target;
+  }
+
+  /* ---- countdown ---- */
+  const pad = (n, len) => String(n).padStart(len, '0');
+
+  function setNum(el, text) {
+    if (el.textContent === text) return;
+    el.textContent = text;
+    if (!reduceMotion.matches && el.animate) {
+      el.animate(
+        [{ opacity: .55, transform: 'translateY(-5px)' }, { opacity: 1, transform: 'none' }],
+        { duration: 320, easing: 'cubic-bezier(.2,.7,.2,1)' }
+      );
+    }
+  }
+
+  function render(now) {
+    const remaining = Math.max(0, launchAt - now);          // never negative
+    const total = Math.floor(remaining / 1000);
+    setNum(els.d, pad(Math.floor(total / 86400), 3));
+    setNum(els.h, pad(Math.floor((total % 86400) / 3600), 2));
+    setNum(els.m, pad(Math.floor((total % 3600) / 60), 2));
+    setNum(els.s, pad(total % 60, 2));
+
+    const span = launchAt - startAt;
+    const ratio = span > 0 ? Math.min(1, Math.max(0, (now - startAt) / span)) : 1;
+    els.fill.style.transform = `scaleX(${ratio.toFixed(5)})`;
+    els.pct.textContent = `${(ratio * 100).toFixed(1)}%`;
+
+    return remaining;
+  }
+
+  function finish() {
+    if (live) return;
+    live = true;
+    document.body.dataset.state = 'live';
+    applyLang(lang);
+  }
+
+  function tick() {
+    const now = Date.now();
+    if (!document.hidden) {
+      if (render(now) === 0) { finish(); return; }          // stop the loop once done
+    } else if (now >= launchAt) {
+      render(now); finish(); return;
+    }
+    // align to the next wall-clock second to avoid drift
+    setTimeout(tick, 1000 - (now % 1000) + 8);
+  }
+
+  /* ---- init ---- */
+  function init() {
+    try {
+      const saved = localStorage.getItem('dynvel-lang');
+      if (saved && I18N[saved]) lang = saved;
+    } catch (e) { /* storage unavailable — default language */ }
+
+    if (Date.now() >= launchAt) { live = true; document.body.dataset.state = 'live'; }
+    applyLang(lang);
+
+    $('lang').addEventListener('click', () => {
+      const next = lang === 'tr' ? 'en' : 'tr';
+      applyLang(next);
+      try { localStorage.setItem('dynvel-lang', next); } catch (e) { /* ignore */ }
+    });
+
+    document.addEventListener('visibilitychange', () => { if (!document.hidden && !live) render(Date.now()); });
+
+    render(Date.now());
+    if (Date.now() >= launchAt) finish(); else tick();
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
