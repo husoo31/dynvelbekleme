@@ -296,6 +296,58 @@ h1 .accent {
   container-type: inline-size;   /* lets the 3D depth scale with the visual (cqw) */
 }
 .visual { position: relative; }
+
+/* terminal card — software signature, overlapping the monogram's lower corner */
+.term {
+  position: absolute;
+  right: 0;
+  bottom: 3%;
+  z-index: 2;
+  width: clamp(190px, 41cqw, 280px);
+  font-family: var(--font-mono);
+  font-size: .66rem;
+  line-height: 1.75;
+  color: var(--text-2);
+  background: linear-gradient(180deg, rgba(24, 28, 36, .62), rgba(12, 14, 19, .72));
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, .8), inset 0 1px 0 rgba(255, 255, 255, .06);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  overflow: hidden;
+  pointer-events: none;
+}
+.term-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: .58rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.term-bar i { width: 6px; height: 6px; border-radius: 50%; background: rgba(244, 245, 247, .16); }
+.term-bar span { margin-left: auto; opacity: .7; }
+.term-body { padding: 10px 12px 12px; min-height: 7.6em; white-space: nowrap; }
+.tl { display: block; }
+.tl .p { color: var(--accent); margin-right: .6em; }
+.tl .ok { color: var(--accent); margin-right: .6em; }
+.tl .t { color: var(--text); }
+.tl.dim .t { color: var(--text-2); }
+.cur {
+  display: inline-block;
+  width: .55em;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: -.18em;
+  background: var(--accent);
+  animation: blink 1.05s steps(1) infinite;
+}
+.term .live { animation: ping-soft 2.4s ease-in-out infinite; }
+@keyframes blink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0; } }
+@keyframes ping-soft { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+@media (max-width: 899px) { .term { display: none; } }
 /* WebGL layer — when it is running, the CSS tunnel below stays as a static fallback */
 .gl {
   position: absolute;
@@ -607,6 +659,15 @@ h1 .accent {
           <defs><path id="d-shape" d="M30 20H100A90 90 0 0 1 100 200H30Z"/></defs>
         </svg>
         <canvas class="gl" id="gl"></canvas>
+        <div class="term reveal" style="--d:1100ms" id="term">
+          <div class="term-bar"><i></i><i></i><i></i><span>dynvel — zsh</span></div>
+          <div class="term-body">
+            <span class="tl"><span class="p">$</span><span class="t">dynvel build --release</span></span>
+            <span class="tl dim"><span class="ok">✓</span><span class="t">interface compiled</span></span>
+            <span class="tl dim"><span class="ok">✓</span><span class="t">services linked</span></span>
+            <span class="tl"><span class="ok live">●</span><span class="t" data-live="1">launch in T-—d</span></span>
+          </div>
+        </div>
         <div class="scene">
           <div class="halo"></div>
           <div class="cam" id="cam"><div class="sway"><div class="tunnel">
@@ -731,6 +792,7 @@ h1 .accent {
   const $ = (id) => document.getElementById(id);
   const root = document.documentElement;
   const launchAt = Date.parse(CONFIG.launch);
+  root.dataset.launch = String(launchAt);
   const startAt  = Date.parse(CONFIG.start);
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -1040,6 +1102,58 @@ void main(){
   canvas.addEventListener('webglcontextlost', (e) => {
     e.preventDefault(); cancelAnimationFrame(raf); document.documentElement.classList.remove('gl-ready');
   });
+})();
+
+/* Terminal card: types a short build log on a loop (static text if motion is reduced). */
+(() => {
+  'use strict';
+  const term = document.getElementById('term');
+  if (!term) return;
+  const rows = [...term.querySelectorAll('.tl')];
+  const texts = rows.map((r) => r.querySelector('.t'));
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const days = () => {
+    const t = Number(document.documentElement.dataset.launch);
+    return t ? Math.max(0, Math.floor((t - Date.now()) / 864e5)) : null;
+  };
+  const full = () => texts.map((el) => {
+    if (el.dataset.live) { const d = days(); return d === null ? el.textContent : (d > 0 ? 'launch in T-' + d + 'd' : 'live'); }
+    return el.dataset.full || el.textContent;
+  });
+  texts.forEach((el) => { el.dataset.full = el.textContent; });
+
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const cur = document.createElement('i');
+  cur.className = 'cur';
+
+  function showStatic() {
+    const f = full();
+    texts.forEach((el, i) => { el.textContent = f[i]; });
+    rows[rows.length - 1].appendChild(cur);
+  }
+  if (reduce.matches) { showStatic(); return; }
+
+  async function run() {
+    for (;;) {
+      const f = full();
+      texts.forEach((el) => { el.textContent = ''; });
+      rows.forEach((r) => { r.style.visibility = 'hidden'; });
+      await sleep(1700);
+      for (let i = 0; i < rows.length; i++) {
+        rows[i].style.visibility = 'visible';
+        rows[i].appendChild(cur);
+        for (let c = 1; c <= f[i].length; c++) {
+          texts[i].textContent = f[i].slice(0, c);
+          await sleep(i === 0 ? 55 : 28);
+          while (document.hidden) await sleep(500);
+        }
+        await sleep(i === 0 ? 650 : 380);
+      }
+      await sleep(6500);
+      if (reduce.matches) { showStatic(); return; }
+    }
+  }
+  run();
 })();
 </script>
 </body>
