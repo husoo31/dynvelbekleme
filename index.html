@@ -484,17 +484,20 @@ h1 .accent {
     grid-template-columns: minmax(0, 1fr);
     padding-block: var(--s8) var(--s7);
   }
-  /* On narrow screens the visual becomes atmosphere behind the copy */
+  /* On narrow screens the visual sits above the copy as a compact hero image,
+     so it never overlaps text */
+  .hero { gap: var(--s5); padding-block: var(--s4) var(--s6); }
   .visual {
-    position: absolute;
-    z-index: -1;
-    top: 50%;
-    right: -38%;
-    width: min(125vw, 680px);
-    margin-top: calc(min(125vw, 680px) * -.4);
-    opacity: .3;
+    order: -1;
+    justify-self: center;
+    width: min(92%, 420px, 36svh);
+    min-width: 240px;
   }
   .lede { max-width: 34ch; }
+}
+/* Short landscape screens: no room for the illustration */
+@media (max-width: 899px) and (max-height: 520px) {
+  .visual { display: none; }
 }
 @media (max-width: 599px) {
   .status { display: none; }
